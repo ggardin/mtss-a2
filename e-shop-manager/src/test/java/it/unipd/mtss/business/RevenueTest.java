@@ -23,6 +23,7 @@ public class RevenueTest {
   private EItem keyboard;
   private EItem motherboard;
   private EItem mouse;
+  private EItem anotherMouse;
   private EItem processor;
 
   private Revenue revenue;
@@ -31,23 +32,31 @@ public class RevenueTest {
   private ArrayList<EItem> emptyList;
   private ArrayList<EItem> nullList;
   private ArrayList<EItem> itemsList;
+  private ArrayList<EItem> miceList;
 
   @Before
   public void setUpObject() {
     keyboard = new EItem("Logitech x 300", 45.6, itemType.Keyboard);
     motherboard = new EItem("RoG zy 1080", 1099.99, itemType.Motherboard);
     mouse = new EItem("Asus L3", 9.99, itemType.Mouse);
+    anotherMouse = new EItem("Roccat Pure", 19.75, itemType.Mouse);
     processor = new EItem("Intel i5", 49.99, itemType.Processor);
 
     emptyList = new ArrayList<EItem>();
     itemsList = new ArrayList<EItem>();
+    miceList = new ArrayList<EItem>();
+    nullList = new ArrayList<EItem>();
 
     itemsList.add(keyboard);
     itemsList.add(motherboard);
     itemsList.add(mouse);
     itemsList.add(processor);
 
-    nullList = new ArrayList<EItem>();
+    miceList.add(anotherMouse);
+    for (int i = 0; i < 10 - 1; i++) {
+      miceList.add(mouse);
+    }
+
     nullList.add(keyboard);
     nullList.add(null);
 
@@ -112,4 +121,21 @@ public class RevenueTest {
     processor4List.add(new EItem("Intel i10", 19.99, itemType.Processor));
     assertEquals(219.96, revenue.getOrderPrice(processor4List, user), 0.1);
   }
+
+  @Test(expected = BillException.class)
+  public void freeCheapestMouseIf10MiceNullTest() {
+    revenue.freeCheapestMouseIfMoreThan10Mice(null);
+  }
+
+  @Test
+  public void freeCheapestMouseIf10MiceOrLessTest() {
+      assertEquals(109.66, revenue.getOrderPrice(miceList, user), 0.01);
+  }
+
+  @Test
+  public void freeCheapestMouseIfMoreThan10MiceTest() {
+      miceList.add(anotherMouse);
+      assertEquals(119.42, revenue.getOrderPrice(miceList, user), 0.1);
+  }
+
 }
