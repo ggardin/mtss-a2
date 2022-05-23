@@ -235,6 +235,11 @@ public class RevenueTest {
   }
 
   @Test(expected = BillException.class)
+  public void giveAwayNullListTest() {
+    revenue.giveAway(null);
+  }
+
+  @Test(expected = BillException.class)
   public void giveAwayEmptyListTest() {
     revenue.giveAway(new ArrayList<Order>());
   }
