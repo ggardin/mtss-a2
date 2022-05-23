@@ -25,19 +25,54 @@ public class Revenue implements Bill {
       throw new BillException("La lista degli EItems non può essere vuota.");
     }
 
-    if(itemsOrdered.size() > 30) {
-      throw new BillException("Non è possibile eseguire un ordinazione con più di 30 elementi.");
-    }
-
     double orderPrice = 0.0;
+    double totalDiscount = 0.0;
+    ArrayList<EItem> processorList = new ArrayList<>();
 
     for (EItem item: itemsOrdered) {
       if (item == null) {
         throw new BillException("La lista contiene un oggetto nullo.");
       }
+      switch (item.getItem()) {
+        case Processor:
+          processorList.add(item);
+          break;
+      }
       orderPrice += item.getPrice();
     }
-    return orderPrice;
+
+    totalDiscount += getSaleIf5Processor(itemsOrdered);
+    return orderPrice - totalDiscount;
+  }
+
+  double getSaleIf5Processor(List<EItem> itemsOrdered) {
+    if (itemsOrdered == null) {
+      throw new BillException("La lista degli EItems non può essere nulla.");
+    }
+
+    if (itemsOrdered.size() == 0) {
+      throw new BillException("La lista degli EItems non può essere vuota.");
+    }
+
+    double min = Double.MAX_VALUE;
+    ArrayList<EItem> processors = new ArrayList<>();
+    for (EItem item : itemsOrdered) {
+      if(item == null) {
+        throw new BillException("EItem non deve essere nullo.");
+      }
+      if (item.getItem().equals(itemType.Processor)) {
+        if (item.getPrice() <= min) {
+          min = item.getPrice();
+        }
+        processors.add(item);
+      }
+    }
+
+    if (processors.size() > 5) {
+      return min * 0.5;
+    }
+
+    return 0;
   }
 }
 

@@ -71,9 +71,45 @@ public class RevenueTest {
     revenue.getOrderPrice(nullList, user);
   }
 
+  @Test(expected = BillException.class)
+  public void getSaleIf5ProcessorNullTest() {
+    revenue.getSaleIf5Processor(null);
+  }
+
+  @Test(expected = BillException.class)
+  public void getSaleIf5ProcessorEmptyListTest() {
+    revenue.getSaleIf5Processor(emptyList);
+  }
+
+  @Test(expected = BillException.class)
+  public void getSaleIf5ProcessorListContainsNullObjectTest() {
+    revenue.getSaleIf5Processor(nullList);
+  }
+
   @Test
   public void getTotalTest() {
     assertEquals(1205.57, revenue.getOrderPrice(itemsList, user), 0.01);
   }
 
+  @Test
+  public void getTotalWithProcessorsSaleTest() {
+    ArrayList<EItem> processors6List = new ArrayList<>();
+    processors6List.add(new EItem("Intel i1", 49.99, itemType.Processor));
+    processors6List.add(new EItem("Intel i2", 79.99, itemType.Processor));
+    processors6List.add(new EItem("Intel i3", 19.99, itemType.Processor));
+    processors6List.add(new EItem("Intel i4", 29.99, itemType.Processor));
+    processors6List.add(new EItem("Intel i5", 109.99, itemType.Processor));
+    processors6List.add(new EItem("Intel i6", 89.99, itemType.Processor));
+    assertEquals(369.95, revenue.getOrderPrice(processors6List, user), 0.1);
+  }
+
+  @Test
+  public void getTotalWithNoProcessorSaleTest() {
+    ArrayList<EItem> processor4List = new ArrayList<>();
+    processor4List.add(new EItem("Intel i7", 99.99, itemType.Processor));
+    processor4List.add(new EItem("Intel i8", 29.99, itemType.Processor));
+    processor4List.add(new EItem("Intel i9", 69.99, itemType.Processor));
+    processor4List.add(new EItem("Intel i10", 19.99, itemType.Processor));
+    assertEquals(219.96, revenue.getOrderPrice(processor4List, user), 0.1);
+  }
 }
