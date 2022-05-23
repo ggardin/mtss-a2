@@ -77,12 +77,12 @@ public class RevenueTest {
   }
 
   @Test(expected = BillException.class)
-  public void getSaleIf5ProcessorNullTest() {
+  public void getSaleIf5ProcessorEmptyListTest() {
     revenue.getSaleIf5Processor(emptyList);
   }
 
   @Test(expected = BillException.class)
-  public void getSaleIf5ProcessorNullTest() {
+  public void getSaleIf5ProcessorListContainsNullObjectTest() {
     revenue.getSaleIf5Processor(nullList);
   }
 
