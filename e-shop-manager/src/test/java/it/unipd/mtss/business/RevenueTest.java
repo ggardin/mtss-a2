@@ -71,6 +71,21 @@ public class RevenueTest {
     revenue.getOrderPrice(nullList, user);
   }
 
+  @Test(expected = BillException.class)
+  public void getSaleIf5ProcessorNullTest() {
+    revenue.getSaleIf5Processor(null);
+  }
+
+  @Test(expected = BillException.class)
+  public void getSaleIf5ProcessorNullTest() {
+    revenue.getSaleIf5Processor(emptyList);
+  }
+
+  @Test(expected = BillException.class)
+  public void getSaleIf5ProcessorNullTest() {
+    revenue.getSaleIf5Processor(nullList);
+  }
+
   @Test
   public void getTotalTest() {
     assertEquals(1205.57, revenue.getOrderPrice(itemsList, user), 0.01);
