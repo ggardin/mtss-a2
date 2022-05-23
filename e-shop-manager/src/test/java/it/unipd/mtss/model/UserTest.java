@@ -73,4 +73,9 @@ public class UserTest {
   public void userGetLastnameTest() {
     assertEquals("Doe", mock.getLastname());
   }
+
+  @Test
+  public void userGetAgeTest() {
+    assertEquals(18, mock.getAge());
+  }
 }
