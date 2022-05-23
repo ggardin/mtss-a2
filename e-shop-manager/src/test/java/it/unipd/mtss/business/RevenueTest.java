@@ -41,13 +41,19 @@ public class RevenueTest {
 
     emptyList = new ArrayList<EItem>();
     itemsList = new ArrayList<EItem>();
+    miceList = new ArrayList<EItem>();
+    nullList = new ArrayList<EItem>();
 
     itemsList.add(keyboard);
     itemsList.add(motherboard);
     itemsList.add(mouse);
     itemsList.add(processor);
 
-    nullList = new ArrayList<EItem>();
+    miceList.add(anotherMouse);
+    for (int i = 0; i < 10 - 1; i++) {
+      miceList.add(mouse);
+    }
+
     nullList.add(keyboard);
     nullList.add(null);
 
@@ -112,4 +118,21 @@ public class RevenueTest {
     processor4List.add(new EItem("Intel i10", 19.99, itemType.Processor));
     assertEquals(219.96, revenue.getOrderPrice(processor4List, user), 0.1);
   }
+
+  @Test(expected = BillException.class)
+  public void freeCheapestMouseIf10MiceNullTest() {
+    revenue.freeItemIf10Mice(null);
+  }
+
+  @Test
+  public void freeCheapestMouseIf10MiceOrLessTest() {
+      assertEquals(109.66, revenue.getOrderPrice(miceList, user), 0.01);
+  }
+
+  @Test
+  public void freeCheapestMouseIfMoreThan10MiceTest() {
+      miceList.add(anotherMouse);
+      assertEquals(119.42, revenue.getOrderPrice(miceList, user), 0.1);
+  }
+
 }
