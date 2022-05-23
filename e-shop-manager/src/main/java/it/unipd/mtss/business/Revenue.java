@@ -42,7 +42,7 @@ public class Revenue implements Bill {
     }
 
     totalDiscount += getSaleIf5Processor(itemsOrdered);
-    totalDiscount += freeItemIf10Mice(itemsOrdered);
+    totalDiscount += freeCheapestMouseIfMoreThan10Mice(itemsOrdered);
     return orderPrice - totalDiscount;
   }
 
