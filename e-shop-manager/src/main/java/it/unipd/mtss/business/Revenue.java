@@ -42,6 +42,7 @@ public class Revenue implements Bill {
     }
 
     totalDiscount += getSaleIf5Processor(itemsOrdered);
+    totalDiscount += freeItemIf10Mice(itemsOrdered);
     return orderPrice - totalDiscount;
   }
 
@@ -74,5 +75,34 @@ public class Revenue implements Bill {
 
     return 0;
   }
+
+  double freeCheapestMouseIfMoreThan10Mice(List<EItem> itemsOrdered) {
+    if(itemsOrdered == null) {
+      throw new BillException("La lista degli EItems non può essere nulla.");
+    }
+
+    double minPrice;
+    minPrice = 0.0;
+    ArrayList<EItem> mice = new ArrayList<>();
+
+    for (EItem item : itemsOrdered) {
+      if (item.getItem().equals(itemType.Mouse)) {
+        mice.add(item);
+      }
+    }
+
+    if (mice.size() > 10) {
+      minPrice = mice.get(0).getPrice();
+      for (int i = 0; i < mice.size(); i++) {
+        if (mice.get(i).getPrice() < minPrice) {
+          minPrice = mice.get(i).getPrice();
+        }
+      }
+    }
+
+    return minPrice;
+
+  }
+
 }
 

@@ -23,6 +23,7 @@ public class RevenueTest {
   private EItem keyboard;
   private EItem motherboard;
   private EItem mouse;
+  private EItem anotherMouse;
   private EItem processor;
 
   private Revenue revenue;
@@ -31,12 +32,14 @@ public class RevenueTest {
   private ArrayList<EItem> emptyList;
   private ArrayList<EItem> nullList;
   private ArrayList<EItem> itemsList;
+  private ArrayList<EItem> miceList;
 
   @Before
   public void setUpObject() {
     keyboard = new EItem("Logitech x 300", 45.6, itemType.Keyboard);
     motherboard = new EItem("RoG zy 1080", 1099.99, itemType.Motherboard);
     mouse = new EItem("Asus L3", 9.99, itemType.Mouse);
+    anotherMouse = new EItem("Roccat Pure", 19.75, itemType.Mouse);
     processor = new EItem("Intel i5", 49.99, itemType.Processor);
 
     emptyList = new ArrayList<EItem>();
@@ -121,7 +124,7 @@ public class RevenueTest {
 
   @Test(expected = BillException.class)
   public void freeCheapestMouseIf10MiceNullTest() {
-    revenue.freeItemIf10Mice(null);
+    revenue.freeCheapestMouseIfMoreThan10Mice(null);
   }
 
   @Test
