@@ -31,6 +31,7 @@ public class Revenue implements Bill {
 
     double orderPrice = 0.0;
     double totalDiscount = 0.0;
+    double totalFees = 0.0;
     ArrayList<EItem> processorList = new ArrayList<>();
     ArrayList<EItem> mouseList = new ArrayList<>();
     ArrayList<EItem> keyboardList = new ArrayList<>();
@@ -60,7 +61,8 @@ public class Revenue implements Bill {
     totalDiscount += getSaleIf5Processor(itemsOrdered);
     totalDiscount += freeCheapestMouseIfMoreThan10Mice(itemsOrdered);
     totalDiscount += offerDiscountIfTotalOverThreshold(itemsOrdered);
-    return orderPrice - totalDiscount;
+    totalFees += addFee(itemsOrdered);
+    return orderPrice - totalDiscount + totalFees;
   }
 
   double getSaleIf5Processor(List<EItem> itemsOrdered) {
@@ -163,6 +165,28 @@ public class Revenue implements Bill {
     return discount;
   }
 
+  double addFee(List<EItem> itemsOrdered) {
+    if(itemsOrdered == null) {
+      throw new BillException("La lista degli EItems non può essere nulla.");
+    }
+
+    double total;
+    double threshold;
+    double fee;
+
+    total = 0.0;
+    threshold = 10.0;
+    fee = 2.0;
+
+    for (EItem item : itemsOrdered) {
+      total += item.getPrice();
+    }
+    if (total < threshold) {
+      return fee;
+    }
+
+    return 0.0;
+  }
 
 }
 

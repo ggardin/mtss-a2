@@ -180,4 +180,16 @@ public class RevenueTest {
     revenue.getOrderPrice(_items, user);
   }
 
+  @Test(expected = BillException.class)
+  public void addFeeIfBelow10EuroNullTest() {
+    revenue.addFee(null);
+  }
+
+  @Test
+  public void addFeeIfBelow10EuroTest() {
+    ArrayList<EItem> belowThresholdList = new ArrayList<EItem>();
+    belowThresholdList.add(mouse);
+    assertEquals(11.99, revenue.getOrderPrice(belowThresholdList, user), 0.01);
+  }
+
 }
