@@ -10,6 +10,10 @@ import it.unipd.mtss.model.EItem;
 import it.unipd.mtss.model.itemType;
 import it.unipd.mtss.model.User;
 
+import it.unipd.mtss.model.Order;
+
+import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -186,6 +190,36 @@ public class Revenue implements Bill {
     }
 
     return 0.0;
+  }
+
+  public List<Order> giveAway(List<Order> orders) throws BillException {
+    ArrayList<Order> freeOrders = new ArrayList<>();
+    if (orders == null) {
+      throw new BillException("La lista degli ordini da regalare non deve essere nulla.");
+    }
+
+    if (orders.size() == 0) {
+      throw new BillException("La lista degli ordini da regalare non deve essere vuota.");
+    }
+
+    ArrayList<Order> orderPool = new ArrayList<>();
+    for (Order order : orders) {
+      if (order.getUser().getAge() < 18) {
+        if (order.getTime().isAfter(LocalTime.of(17, 59, 59)) && order.getTime().isBefore(LocalTime.of(19, 0, 1))) {
+          orderPool.add(order);
+        }
+      }
+    }
+    if (orderPool.size() > 0) {
+      Collections.shuffle(orderPool);
+      int max = Math.min(orderPool.size(), 10);
+      for (int i = 0; i < max; i++) {
+        orderPool.get(i).setPrice(0);
+        freeOrders.add((orderPool.get(i)));
+      }
+    }
+
+    return freeOrders;
   }
 
 }
