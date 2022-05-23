@@ -55,6 +55,7 @@ public class Revenue implements Bill {
 
     totalDiscount += getSaleIf5Processor(itemsOrdered);
     totalDiscount += freeCheapestMouseIfMoreThan10Mice(itemsOrdered);
+    totalDiscount += offerDiscountIfTotalOverThreshold(itemsOrdered);
     return orderPrice - totalDiscount;
   }
 
@@ -134,6 +135,30 @@ public class Revenue implements Bill {
 
     return Math.min(min1, min2);
   }
+
+  double offerDiscountIfTotalOverThreshold(List<EItem> itemsOrdered) {
+    if(itemsOrdered == null) {
+      throw new BillException("La lista degli EItems non può essere nulla.");
+    }
+
+    double total;
+    double threshold;
+    double discount;
+
+    total = 0.0;
+    threshold = 1000.0;
+    discount = 0.0;
+
+    for (EItem item : itemsOrdered) {
+      total += item.getPrice();
+    }
+    if (total > threshold) {
+      discount = total * 0.1;
+    }
+
+    return discount;
+  }
+
 
 }
 
