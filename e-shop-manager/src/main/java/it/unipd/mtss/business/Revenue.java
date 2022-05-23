@@ -28,6 +28,8 @@ public class Revenue implements Bill {
     double orderPrice = 0.0;
     double totalDiscount = 0.0;
     ArrayList<EItem> processorList = new ArrayList<>();
+    ArrayList<EItem> mouseList = new ArrayList<>();
+    ArrayList<EItem> keyboardList = new ArrayList<>();
 
     for (EItem item: itemsOrdered) {
       if (item == null) {
@@ -37,8 +39,18 @@ public class Revenue implements Bill {
         case Processor:
           processorList.add(item);
           break;
+        case Keyboard:
+          keyboardList.add(item);
+          break;
+        case Mouse:
+          mouseList.add(item);
+          break;
       }
       orderPrice += item.getPrice();
+    }
+
+    if (keyboardList.size() != 0 && keyboardList.size() == mouseList.size()) {
+      totalDiscount += freeObject(keyboardList, mouseList);
     }
 
     totalDiscount += getSaleIf5Processor(itemsOrdered);
@@ -102,6 +114,25 @@ public class Revenue implements Bill {
 
     return minPrice;
 
+  }
+
+  double freeObject(List<EItem> list1, List<EItem> list2) {
+    double min1 = Double.MAX_VALUE;
+    double min2 = Double.MAX_VALUE;
+
+    for (EItem item : list1) {
+      if (item.getPrice() <= min1) {
+        min1 = item.getPrice();
+      }
+    }
+
+    for (EItem item : list2) {
+      if (item.getPrice() <= min1) {
+        min2 = item.getPrice();
+      }
+    }
+
+    return Math.min(min1, min2);
   }
 
 }

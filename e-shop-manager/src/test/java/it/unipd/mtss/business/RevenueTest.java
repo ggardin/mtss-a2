@@ -34,6 +34,8 @@ public class RevenueTest {
   private ArrayList<EItem> itemsList;
   private ArrayList<EItem> miceList;
 
+  private ArrayList<EItem> keyboardMouseList;
+
   @Before
   public void setUpObject() {
     keyboard = new EItem("Logitech x 300", 45.6, itemType.Keyboard);
@@ -59,6 +61,10 @@ public class RevenueTest {
 
     nullList.add(keyboard);
     nullList.add(null);
+
+    keyboardMouseList = new ArrayList<>();
+    keyboardMouseList.add(keyboard);
+    keyboardMouseList.add(mouse);
 
     user = new User("MarioRossi", "Mario", "Rossi", 45);
     revenue = new Revenue();
@@ -97,7 +103,7 @@ public class RevenueTest {
 
   @Test
   public void getTotalTest() {
-    assertEquals(1205.57, revenue.getOrderPrice(itemsList, user), 0.01);
+    assertEquals(1195.58, revenue.getOrderPrice(itemsList, user), 0.01);
   }
 
   @Test
@@ -135,7 +141,18 @@ public class RevenueTest {
   @Test
   public void freeCheapestMouseIfMoreThan10MiceTest() {
       miceList.add(anotherMouse);
-      assertEquals(119.42, revenue.getOrderPrice(miceList, user), 0.1);
+      assertEquals(119.42, revenue.getOrderPrice(miceList, user), 0.01);
+  }
+
+  @Test
+  public void getTotalWithSameKeyboardAndMouseTest() {
+    assertEquals(45.6, revenue.getOrderPrice(keyboardMouseList, user), 0.01);
+  }
+
+  @Test
+  public void getTotalWithDifferenteKeyboardAndMouseTest() {
+    keyboardMouseList.add(new EItem("Asus Keyboard", 19.99, itemType.Keyboard));
+    assertEquals(75.58, revenue.getOrderPrice(keyboardMouseList, user), 0.01);
   }
 
 }
