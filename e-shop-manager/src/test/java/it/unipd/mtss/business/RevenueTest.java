@@ -170,4 +170,14 @@ public class RevenueTest {
       assertEquals(109.66, revenue.getOrderPrice(miceList, user), 0.01);
   }
 
+  @Test(expected = BillException.class)
+  public void orderDisallowedWithMore30EItemTest() {
+    ArrayList<EItem> _items = new ArrayList<>();
+    for(int i = 0; i < 36; i++) {
+      _items.add(new EItem("Asus Keyboard", 19.99, itemType.Keyboard));
+    }
+
+    revenue.getOrderPrice(_items, user);
+  }
+
 }
