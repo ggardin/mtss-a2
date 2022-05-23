@@ -12,6 +12,7 @@ import it.unipd.mtss.model.Order;
 import it.unipd.mtss.model.itemType;
 import it.unipd.mtss.model.User;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -35,6 +36,9 @@ public class RevenueTest {
   private ArrayList<EItem> miceList;
 
   private ArrayList<EItem> keyboardMouseList;
+
+  private String[] names;
+  private String[] surnames;
 
   @Before
   public void setUpObject() {
@@ -65,6 +69,44 @@ public class RevenueTest {
     keyboardMouseList = new ArrayList<>();
     keyboardMouseList.add(keyboard);
     keyboardMouseList.add(mouse);
+
+    names = new String[] {
+            "Mario",
+            "Barbara",
+            "Luca",
+            "Giovanna",
+            "Alberto",
+            "Martina",
+            "Marco",
+            "Giulia",
+            "Francesco",
+            "Lucia",
+            "Stefano",
+            "Elisa",
+            "Valter",
+            "Ada",
+            "Alessandro",
+            "Elisabetta"
+    };
+
+    surnames = new String[] {
+            "Rossi",
+            "Gialli",
+            "Verdi",
+            "Bianchi",
+            "Neri",
+            "Jobs",
+            "Torvalds",
+            "Ritchie",
+            "Stroustrup",
+            "Gates",
+            "Lovelace",
+            "Mercury",
+            "Ibrahimovic",
+            "Prince",
+            "Thumberg",
+            "Berlusconi"
+    };
 
     user = new User("MarioRossi", "Mario", "Rossi", 45);
     revenue = new Revenue();
@@ -191,5 +233,73 @@ public class RevenueTest {
     belowThresholdList.add(mouse);
     assertEquals(11.99, revenue.getOrderPrice(belowThresholdList, user), 0.01);
   }
+
+  @Test(expected = BillException.class)
+  public void giveAwayEmptyListTest() {
+    revenue.giveAway(new ArrayList<Order>());
+  }
+
+  @Test
+  public void giveAwayNoFreeOrderTest() {
+    Order order = new Order(itemsList, user, LocalTime.of(20, 0,0), 200);
+    ArrayList<Order> aux = new ArrayList<>();
+    aux.add(order);
+    assertEquals(0, revenue.giveAway(aux).size());
+  }
+
+  @Test
+  public void giveAwayWrongHourRangeTest() {
+    User user = new User("MargheritaHack", "Margherita", "Hack", 17);
+    Order order = new Order(itemsList, user, LocalTime.of(20, 0,0), 200);
+    ArrayList<Order> aux = new ArrayList<>();
+    aux.add(order);
+    assertEquals(0, revenue.giveAway(aux).size());
+  }
+
+  @Test
+  public void giveAwayAgeOlderThan18Test() {
+    User user = new User("MargheritaHack", "Margherita", "Hack", 20);
+    Order order = new Order(itemsList, user, LocalTime.of(18, 30,0), 200);
+    ArrayList<Order> aux = new ArrayList<>();
+    aux.add(order);
+    assertEquals(0, revenue.giveAway(aux).size());
+  }
+
+  @Test
+  public void giveAwayOneOrderTest() {
+    User user = new User("MargheritaHack", "Margherita", "Hack", 17);
+    Order order = new Order(itemsList, user, LocalTime.of(18, 30,0), 200);
+    ArrayList<Order> aux = new ArrayList<>();
+    aux.add(order);
+    assertEquals(1, revenue.giveAway(aux).size());
+  }
+
+  @Test
+  public void giveAwayMultipleOrdersTest() {
+    ArrayList<Order> aux = new ArrayList<>();
+    for(int i = 0; i < 16; i++) {
+      User user = new User(names[i]+surnames[i], names[i], surnames[i], 17);
+      Order order = new Order(itemsList, user, LocalTime.of(18, 30,0), 200);
+      aux.add(order);
+    }
+    assertEquals(10, revenue.giveAway(aux).size());
+  }
+
+  @Test
+  public void giveAwayMultipleOrdersYoungerAndOlderTest() {
+    ArrayList<Order> aux = new ArrayList<>();
+    for(int i = 0; i < 5; i++) {
+      User user1 = new User(names[i]+surnames[i], names[i], surnames[i], 17);
+      Order order1 = new Order(itemsList, user1, LocalTime.of(18, 30,0), 200);
+      aux.add(order1);
+    }
+    for(int i = 0; i < 5; i++) {
+      User user2 = new User(names[i]+surnames[i], names[i], surnames[i], 45);
+      Order order2 = new Order(itemsList, user2, LocalTime.of(18, 30,0), 200);
+      aux.add(order2);
+    }
+    assertEquals(5, revenue.giveAway(aux).size());
+  }
+
 
 }
