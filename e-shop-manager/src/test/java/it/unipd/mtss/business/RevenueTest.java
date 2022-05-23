@@ -103,7 +103,7 @@ public class RevenueTest {
 
   @Test
   public void getTotalTest() {
-    assertEquals(1195.58, revenue.getOrderPrice(itemsList, user), 0.01);
+    assertEquals(1075.02, revenue.getOrderPrice(itemsList, user), 0.01);
   }
 
   @Test
@@ -153,6 +153,21 @@ public class RevenueTest {
   public void getTotalWithDifferenteKeyboardAndMouseTest() {
     keyboardMouseList.add(new EItem("Asus Keyboard", 19.99, itemType.Keyboard));
     assertEquals(75.58, revenue.getOrderPrice(keyboardMouseList, user), 0.01);
+  }
+
+  @Test(expected = BillException.class)
+  public void offerDiscountIfTotalOverThresholdNullTest() {
+    revenue.offerDiscountIfTotalOverThreshold(null);
+  }
+
+  @Test
+  public void offerDiscountIfTotalOverThresholdTest() {
+      assertEquals(1075.02, revenue.getOrderPrice(itemsList, user), 0.01);
+  }
+
+  @Test
+  public void doNotOfferDiscountIfTotalBelowThresholdTest() {
+      assertEquals(109.66, revenue.getOrderPrice(miceList, user), 0.01);
   }
 
 }
